@@ -1,0 +1,72 @@
+project:
+  project_id: healthcare-de-demo
+  project_name: Healthcare Data Engineering Demo
+
+locations:
+  default_region: us-central1
+  dataflow_region: us-central1
+  dataproc_region: us-central1
+  composer_region: us-central1
+  bucket_location: us-central1
+  bigquery_location: us-central1
+
+gcs:
+  bucket_name: mounika-healthcare-data
+  landing_path: gs://mounika-healthcare-data/landing
+  staging_path: gs://mounika-healthcare-data/staging
+  processed_path: gs://mounika-healthcare-data/processed
+  archive_path: gs://mounika-healthcare-data/archive
+  temp_path: gs://mounika-healthcare-data/temp
+
+bigquery:
+  raw_dataset: healthcare_raw
+  staging_dataset: healthcare_staging
+  gold_dataset: healthcare_curated
+  audit_dataset: healthcare_audit
+
+service_accounts:
+  dataflow_service_account: healthcare-dataflow-sa@healthcare-de-demo.iam.gserviceaccount.com
+  composer_service_account: healthcare-composer-sa@healthcare-de-demo.iam.gserviceaccount.com
+  cloudbuild_service_account: healthcare-build-sa@healthcare-de-demo.iam.gserviceaccount.com
+  dataproc_service_account: healthcare-dataproc-sa@healthcare-de-demo.iam.gserviceaccount.com
+
+pipelines:
+  batch_pipeline_name: healthcare_batch_dataflow_pipeline
+  streaming_pipeline_name: healthcare_pubsub_streaming_pipeline
+  dataproc_job_name: healthcare_dataproc_spark_job
+
+batch_pipeline:
+  source_format: csv
+  delimiter: ","
+  has_header: true
+  load_type: batch
+  schedule: daily
+  expected_arrival_time: "23:00"
+
+streaming_pipeline:
+  source: pubsub
+  topic_name: healthcare-claims-topic
+  subscription_name: healthcare-claims-subscription
+  target_table: streaming_claims_events
+
+data_warehouse:
+  architecture: medallion
+  layers:
+    bronze: healthcare_raw
+    silver: healthcare_staging
+    gold: healthcare_curated
+  modeling:
+    schema_type: star_schema
+    scd_type_1_tables:
+      - dim_patient
+      - dim_hospital
+      - dim_insurance
+    scd_type_2_tables:
+      - dim_doctor
+      - dim_patient_history
+
+audit:
+  audit_table: pipeline_audit_log
+  data_quality_table: data_quality_results
+  enable_audit_logging: true
+  enable_data_quality_checks: true

@@ -1,0 +1,138 @@
+tables:
+  - table_name: dim_date
+    file_name: dim_date.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_date/dim_date.csv
+    raw_table: raw_dim_date
+    staging_table: stg_dim_date
+    gold_table: dim_date
+    primary_key: date_id
+    table_type: dimension
+    scd_type: none
+    partition_column: null
+    cluster_columns: []
+
+  - table_name: dim_patient
+    file_name: dim_patient.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_patient/dim_patient.csv
+    raw_table: raw_dim_patient
+    staging_table: stg_dim_patient
+    gold_table: dim_patient
+    primary_key: patient_id
+    table_type: dimension
+    scd_type: 2
+    partition_column: null
+    cluster_columns:
+      - city
+      - gender
+
+  - table_name: dim_hospital
+    file_name: dim_hospital.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_hospital/dim_hospital.csv
+    raw_table: raw_dim_hospital
+    staging_table: stg_dim_hospital
+    gold_table: dim_hospital
+    primary_key: hospital_id
+    table_type: dimension
+    scd_type: 1
+    partition_column: null
+    cluster_columns:
+      - city
+      - hospital_type
+
+  - table_name: dim_doctor
+    file_name: dim_doctor.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_doctor/dim_doctor.csv
+    raw_table: raw_dim_doctor
+    staging_table: stg_dim_doctor
+    gold_table: dim_doctor
+    primary_key: doctor_id
+    table_type: dimension
+    scd_type: 2
+    partition_column: null
+    cluster_columns:
+      - hospital_id
+      - specialization
+
+  - table_name: dim_department
+    file_name: dim_department.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_department/dim_department.csv
+    raw_table: raw_dim_department
+    staging_table: stg_dim_department
+    gold_table: dim_department
+    primary_key: department_id
+    table_type: dimension
+    scd_type: 1
+    partition_column: null
+    cluster_columns:
+      - department_name
+
+  - table_name: dim_diagnosis
+    file_name: dim_diagnosis.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_diagnosis/dim_diagnosis.csv
+    raw_table: raw_dim_diagnosis
+    staging_table: stg_dim_diagnosis
+    gold_table: dim_diagnosis
+    primary_key: diagnosis_code
+    table_type: dimension
+    scd_type: 1
+    partition_column: null
+    cluster_columns:
+      - department_id
+
+  - table_name: dim_insurance
+    file_name: dim_insurance.csv
+    source_path: gs://mounika-healthcare-data/landing/dim_insurance/dim_insurance.csv
+    raw_table: raw_dim_insurance
+    staging_table: stg_dim_insurance
+    gold_table: dim_insurance
+    primary_key: insurance_id
+    table_type: dimension
+    scd_type: 1
+    partition_column: null
+    cluster_columns:
+      - insurance_type
+
+  - table_name: fact_appointments
+    file_name: fact_appointments.csv
+    source_path: gs://mounika-healthcare-data/landing/fact_appointments/fact_appointments.csv
+    raw_table: raw_fact_appointments
+    staging_table: stg_fact_appointments
+    gold_table: fact_appointments
+    primary_key: appointment_id
+    table_type: fact
+    scd_type: none
+    partition_column: appointment_date
+    cluster_columns:
+      - hospital_id
+      - patient_id
+      - doctor_id
+
+  - table_name: fact_claims
+    file_name: fact_claims.csv
+    source_path: gs://mounika-healthcare-data/landing/fact_claims/fact_claims.csv
+    raw_table: raw_fact_claims
+    staging_table: stg_fact_claims
+    gold_table: fact_claims
+    primary_key: claim_id
+    table_type: fact
+    scd_type: none
+    partition_column: claim_date
+    cluster_columns:
+      - hospital_id
+      - patient_id
+      - claim_status
+
+  - table_name: fact_billing
+    file_name: fact_billing.csv
+    source_path: gs://mounika-healthcare-data/landing/fact_billing/fact_billing.csv
+    raw_table: raw_fact_billing
+    staging_table: stg_fact_billing
+    gold_table: fact_billing
+    primary_key: bill_id
+    table_type: fact
+    scd_type: none
+    partition_column: bill_date
+    cluster_columns:
+      - hospital_id
+      - patient_id
+      - payment_mode
