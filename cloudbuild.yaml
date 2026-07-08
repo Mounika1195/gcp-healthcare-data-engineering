@@ -1,24 +1,18 @@
 steps:
   - name: "gcr.io/cloud-builders/gsutil"
-    args:
-      - "cp"
-      - "-r"
-      - "dataflow"
-      - "gs://mounika-healthcare-data/"
+    args: ["cp", "-r", "dataflow", "gs://mounika-healthcare-data/"]
 
   - name: "gcr.io/cloud-builders/gsutil"
-    args:
-      - "cp"
-      - "-r"
-      - "config"
-      - "gs://mounika-healthcare-data/"
+    args: ["cp", "-r", "config", "gs://mounika-healthcare-data/"]
 
   - name: "gcr.io/cloud-builders/gsutil"
-    args:
-      - "cp"
-      - "-r"
-      - "airflow/dags/*"
-      - "gs://mounika-healthcare-data/airflow/dags/"
+    args: ["cp", "setup.py", "gs://mounika-healthcare-data/"]
+
+  - name: "gcr.io/cloud-builders/gsutil"
+    args: ["cp", "requirements.txt", "gs://mounika-healthcare-data/"]
+
+  - name: "gcr.io/cloud-builders/gsutil"
+    args: ["cp", "-r", "airflow/dags", "gs://mounika-healthcare-data/airflow/"]
 
 options:
   logging: CLOUD_LOGGING_ONLY
