@@ -21,6 +21,15 @@ tables:
     table_type: dimension
     scd_type: 2
     partition_column: null
+    columns:
+      - patient_id
+      - patient_name
+      - gender
+      - dob
+      - blood_group
+      - city
+      - state
+      - insurance_id
     cluster_columns:
       - city
       - gender
