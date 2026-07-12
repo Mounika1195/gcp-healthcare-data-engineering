@@ -14,5 +14,8 @@ steps:
   - name: "gcr.io/cloud-builders/gsutil"
     args: ["cp", "-r", "airflow/dags", "gs://mounika-healthcare-data/airflow/"]
 
+  - name: "gcr.io/cloud-builders/gsutil"
+    args: ["cp", "-r", "sql", "gs://mounika-healthcare-data/"]
+
 options:
   logging: CLOUD_LOGGING_ONLY
